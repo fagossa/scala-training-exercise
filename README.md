@@ -26,4 +26,9 @@ The program must produce each hour:
 * The list of servers whose a specific server got connected
 * The server that generated more connections during this period
 
-The amount of lines in a file can be very important : consider a lazy implementation 
+The amount of lines in a file can be very important : consider a lazy implementation
+
+Notes:
+w
+* You can read a file using the following : `Source.fromFile(fileName, "UTF-8").getLines().toStream`
+* You to make a reduce using the following: `List(1, 2, 3).foldLeft(0) { case (previous, current) => previous + current }` 

@@ -38,7 +38,7 @@ object StatsGrouping {
 
   case class RequestedServer(server: Server, amt: Int)
 
-  def mostRequestedServer: ReducedStream[Option[RequestedServer]] = {
+  def mostRequestedServer(range: Range): ReducedStream[Option[RequestedServer]] = {
     def count(stream: Stream[LogLine]): Int = stream.size
     def chooseBigger(previous: Option[RequestedServer], next: RequestedServer): Option[RequestedServer] = {
       previous match {
@@ -48,7 +48,7 @@ object StatsGrouping {
       }
     }
     data =>
-      data
+      StatsFiltering.within(range)(data)
         .groupBy { logLine => logLine.destination }
         .map { case (server, related) => (server, count(related)) }
         .foldLeft(None: Option[RequestedServer]) { case (previous, (server, amt)) =>
