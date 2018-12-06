@@ -4,21 +4,17 @@ import exercise.logs.StatsFiltering.FilteredStream
 import exercise.provider.LogProvider
 
 object StatsCalculator {
-
   def apply(filters: FilteredStream[LogLine]*)(data: Stream[LogLine]): Stream[LogLine] =
     filters.foldLeft(data) {
       case (previousStream, newFilter) => newFilter.apply(previousStream)
     }
-
 }
 
 object StatsGenerator {
-
   def getLinesUsing(logProvider: LogProvider[String]): Stream[LogLine] =
     logProvider.lines()
       .map { line => LogLine.apply(line) }
       .collect { case Some(logLine) => logLine }
-
 }
 
 object StatsFiltering {

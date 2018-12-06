@@ -1,6 +1,7 @@
 package exercise.logs
 
 import java.time.Instant
+import scala.util.Try
 
 case class Server(name: String) extends AnyVal {
   override def toString: String = name
@@ -14,8 +15,10 @@ object LogLine {
   def apply(line: String): Option[LogLine] = {
     line.split(" ").toList match {
       case timestamp :: origin :: destination :: Nil =>
-        // TODO: complete this
-        Some(new LogLine(Instant.now(), Server(origin), Server(destination)))
+        Try(timestamp.toLong)
+          .map { value => Instant.ofEpochMilli(value) }
+          .map { instant => new LogLine(instant, Server(origin), Server(destination)) }
+          .toOption
       case _ =>
         None
     }
